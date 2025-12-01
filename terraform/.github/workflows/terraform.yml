@@ -20,9 +20,8 @@ env:
  BUCKET_TF_STATE: ${{ secrets.BUCKET_TF_STATE}}
  AWS_REGION: us-east-1
  EKS_CLUSTER: vprofile-eks
- #####
 
- jobs:
+jobs:
    terraform:
      name: "Apply terraform code changes"
      runs-on: ubuntu-latest
@@ -41,22 +40,22 @@ env:
          #  terraform_version: 1.6.3
 
        - name: Terraform init
-         id: init 
+         id: init
          run: terraform init -backend-config="bucket=$BUCKET_TF_STATE"
-       
-       - name: Terraform format 
-         id: fmt  
-         run: terraform  fmt -check
-       
-       - name: Terraform validate
-         id: validate 
-         run: terraform validate 
 
-       - name : Terraform plan
-         id: plan 
-         run : terraformn plan -no-color -input=false  -out planfile
+       - name: Terraform format
+         id: fmt
+         run: terraform fmt -check
+
+       - name: Terraform validate
+         id: validate
+         run: terraform validate
+
+       - name: Terraform plan
+         id: plan
+         run: terraform plan -no-color -input=false -out planfile
          continue-on-error: true
 
        - name: Terraform plan status
-         if: steps.plan.outcome == 'failure
-         run: exit 1 
+         if: steps.plan.outcome == 'failure' 
+         run: exit 1
